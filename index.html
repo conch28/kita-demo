@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kita — the live set</title>
+<style>
+:root{
+ --bg:#f4f3f0; --surface:#fcfcfb; --ink:#1a1a19; --mut:#6b6863; --line:#e2dfd9;
+ --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --bad:#d03b3b; --warn:#fab219;
+}
+html[data-theme="dark"]{
+ --bg:#131312; --surface:#1e1e1c; --ink:#f2f1ee; --mut:#9b9791; --line:#332f2b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:15px/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:46px 22px 80px}
+header{display:flex;align-items:flex-start;gap:14px;margin-bottom:26px}
+.mk{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--bg);
+ display:grid;place-items:center;font-weight:800;font-size:17px;flex:none}
+.kick{font-size:10.5px;text-transform:uppercase;letter-spacing:.15em;color:var(--s1);font-weight:700}
+h1{font-size:31px;font-weight:750;letter-spacing:-.03em;margin:8px 0 10px;line-height:1.15}
+.lede{font-size:15.5px;color:var(--mut);max-width:64ch;margin:0}
+.stamp{font-size:12.5px;color:var(--mut);margin-top:12px}
+.th{margin-left:auto;background:none;border:1px solid var(--line);color:var(--ink);
+ border-radius:8px;padding:7px 13px;font-size:12.5px;cursor:pointer;flex:none}
+.th:hover{border-color:var(--s1)}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--mut);
+ margin:38px 0 14px;font-weight:700;display:flex;align-items:center;gap:10px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+a.app{display:block;text-decoration:none;color:inherit;background:var(--surface);
+ border:1px solid var(--line);border-radius:14px;padding:19px 21px;transition:.14s;position:relative}
+a.app:hover{border-color:var(--s1);box-shadow:0 4px 20px rgba(42,120,214,.13);transform:translateY(-1px)}
+a.app.gone{opacity:.5}
+a.app.gone:hover{border-color:var(--bad);box-shadow:none;transform:none}
+.role{font-size:10.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--s1);font-weight:700}
+.nm{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}
+.fn{font-size:11.5px;color:var(--mut);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.ds{font-size:13.5px;color:var(--mut);margin-top:9px;line-height:1.55}
+.meta{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);
+ display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.pill{font-size:10.5px;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:999px;
+ border:1px solid var(--line);color:var(--mut)}
+.pill.on{color:var(--s3);border-color:rgba(27,175,122,.45);background:rgba(27,175,122,.09)}
+.pill.no{color:var(--bad);border-color:rgba(208,59,59,.45);background:rgba(208,59,59,.08)}
+.st{margin-left:auto;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;
+ border:1px solid var(--line);color:var(--mut)}
+.st.ok{color:var(--s3);border-color:rgba(27,175,122,.45);background:rgba(27,175,122,.09)}
+.st.no{color:var(--bad);border-color:rgba(208,59,59,.45);background:rgba(208,59,59,.08)}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--s1);
+ border-radius:0 12px 12px 0;padding:15px 19px;margin:12px 0;font-size:13.5px;color:var(--mut)}
+.note b{color:var(--ink);display:block;margin-bottom:5px;font-size:14px}
+.note.warn{border-left-color:var(--warn)} .note.bad{border-left-color:var(--bad)}
+.note.ok{border-left-color:var(--s3)}
+#alert{display:none;margin:0 0 26px}
+#alert.on{display:block}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);border:0;border-radius:9px;
+ padding:10px 17px;font:600 13.5px/1 inherit;cursor:pointer;text-decoration:none;margin-top:4px}
+.btn:hover{background:var(--s1)}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:none;border-color:var(--s1)}
+.bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:6px 0 2px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;background:var(--surface);
+ border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);
+ font-weight:700;padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+ background:rgba(128,128,128,.12);padding:1px 5px;border-radius:4px}
+ol{margin:8px 0 0;padding-left:20px} ol li{margin:4px 0}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut)}
+@media(max-width:620px){h1{font-size:25px}.wrap{padding:30px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="mk">K</span>
+  <div>
+    <div class="kick">Go-live set · Rev 3</div>
+    <h1>Four surfaces, one operating model</h1>
+    <p class="lede">Everything else in the folder is a superseded build or a working demo.
+      These are the applications to show and to ship. They share one data model: an action taken
+      in any one of them is visible in all the others.</p>
+    <div class="stamp">15 August 2026 · commercial terms from CompanyX_Reply_v5, 14 August 2026
+      · verified across 78 views, 11 farmer screens and 5 applications</div>
+  </div>
+  <button class="th" onclick="var r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'">Theme</button>
+</header>
+
+<!-- shown only when the five app files are not sitting beside this page -->
+<div id="alert" class="note bad">
+  <b id="alertT">The applications are not in this folder</b>
+  <div id="alertB"></div>
+</div>
+
+<div class="bar">
+  <button class="btn" id="openAll" type="button">Open all five</button>
+  <button class="btn ghost" id="recheck" type="button">Re-check files</button>
+  <span class="stamp" id="status" style="margin:0"></span>
+</div>
+
+<h2>The farmer</h2>
+<div class="grid">
+  <a class="app" target="_blank" rel="noopener" href="Kita_Farmer_App.html" data-f="Kita_Farmer_App.html">
+    <div class="role">Farmer · mobile</div>
+    <div class="nm">Kita Farmer App</div>
+    <div class="fn">Kita_Farmer_App.html</div>
+    <div class="ds">Tagalog-first application flow, planting protocol, price floors, the settlement
+      waterfall and three earnings scenarios. Open it in a narrow window to see it as the farmer does.</div>
+    <div class="meta"><span class="pill on">12 screens</span><span class="pill">Tagalog / English</span>
+      <span class="st">checking…</span></div>
+  </a>
+</div>
+
+<h2>The lender</h2>
+<div class="grid">
+  <a class="app" target="_blank" rel="noopener" href="LANDBANK_Officer_Workbench.html" data-f="LANDBANK_Officer_Workbench.html">
+    <div class="role">Landbank · lending officer</div>
+    <div class="nm">Officer Workbench</div>
+    <div class="fn">LANDBANK_Officer_Workbench.html</div>
+    <div class="ds">The officer's daily queue and farmer book, plus financeability against the fourteen
+      conditions precedent, the re-derived score weights, forecast against actual, and the settlement
+      waterfall.</div>
+    <div class="meta"><span class="pill on">9 views</span><span class="pill">CP-1…CP-14</span>
+      <span class="st">checking…</span></div>
+  </a>
+  <a class="app" target="_blank" rel="noopener" href="LANDBANK_Command_Center.html" data-f="LANDBANK_Command_Center.html">
+    <div class="role">Landbank · programme leadership</div>
+    <div class="nm">AGRISENSO Plus Command Centre</div>
+    <div class="fn">LANDBANK_Command_Center.html</div>
+    <div class="ds">Portfolio, pipeline, production and repayment oversight across the programme —
+      the same financeability, weights, forecast and settlement views at portfolio level.</div>
+    <div class="meta"><span class="pill on">11 views</span><span class="pill">Portfolio</span>
+      <span class="st">checking…</span></div>
+  </a>
+</div>
+
+<h2>The buyer</h2>
+<div class="grid">
+  <a class="app" target="_blank" rel="noopener" href="Kita_Buyer_App.html" data-f="Kita_Buyer_App.html">
+    <div class="role">Institutional buyer</div>
+    <div class="nm">Kita Buyer App</div>
+    <div class="fn">Kita_Buyer_App.html</div>
+    <div class="ds">Demand creation with the farmer-economics price guardrail, how this is contracted,
+      contract readiness, supply credibility, contracted supply, acceptance, and the ten-rung
+      commitment ladder.</div>
+    <div class="meta"><span class="pill on">15 views</span><span class="pill">Price guardrail</span>
+      <span class="st">checking…</span></div>
+  </a>
+</div>
+
+<h2>Kita</h2>
+<div class="grid">
+  <a class="app" target="_blank" rel="noopener" href="Kita_Ops_Command.html" data-f="Kita_Ops_Command.html">
+    <div class="role">Kita · internal operations</div>
+    <div class="nm">Operations Command Centre</div>
+    <div class="fn">Kita_Ops_Command.html</div>
+    <div class="ds">The internal console — loans, input commerce, delivery, pricing, working capital,
+      approvals and risk. Plus the Rev 3 commercial work: buyer pipeline and qualification,
+      concentration, fee by crop, and the three decisions.
+      <b>Encrypted.</b> It carries Kita's internal input-margin data, so on a public URL it is
+      published as ciphertext and needs a passphrase to open.</div>
+    <div class="meta"><span class="pill on">43 views</span><span class="pill">🔒 Passphrase required</span>
+      <span class="st">checking…</span></div>
+  </a>
+</div>
+
+<div class="note warn"><b>One of the five is encrypted</b>
+This site is public, so the Operations console is published as ciphertext rather than as a page.
+AES-256-GCM, key derived with PBKDF2-SHA256 at 600,000 rounds, decrypted in your own browser —
+the passphrase is never sent anywhere and the server holds no readable copy. The other four are open.</div>
+
+<h2>How to open this</h2>
+<div class="note"><b>All six files have to sit in the same folder</b>
+This page links to the five applications by filename, so it only works from inside the
+<code>_GO_LIVE</code> folder — the one on the Desktop under <code>Company X / Vera / _GO_LIVE</code>,
+or the unzipped <code>Kita_GO_LIVE.zip</code>. Downloading this page on its own, or viewing it in a
+preview pane, leaves it with nothing to link to. The status pill on each card tells you which case
+you are in.</div>
+
+<h2>What "synced" means here, and what was verified</h2>
+
+<div class="note ok"><b>One model, five surfaces</b>
+All five applications embed the same shared core and read and write the same browser-local state
+under <code>cx_state_v1</code>, with a change bus on <code>cx_bus_v1</code> and a
+<code>companyx_v1</code> broadcast channel. Submit an application in the Farmer App and it appears in
+the Officer Workbench queue, the Command Centre portfolio and the Ops console — in the same browser
+session, without a reload. Use <b>Open all five</b> above and keep the tabs open to see it happen.
+This was tested end to end, not assumed: a record written in one app was confirmed present in memory
+and in storage in all four others.</div>
+
+<table>
+  <tr><th>Checked</th><th>Result</th></tr>
+  <tr><td>Shared state key, bus key and broadcast channel</td><td>identical in all five</td></tr>
+  <tr><td>Crop keys and shared crop economics — price, floor, ceiling, loan and cost per hectare</td>
+      <td>identical in all five</td></tr>
+  <tr><td>Shared core API — state, save, book, bus, gates, loan split, harvest</td>
+      <td>identical in all five</td></tr>
+  <tr><td>Commercial data — fee schedule, contract structure, credit weights</td>
+      <td>identical in all five</td></tr>
+  <tr><td>Live write in one app, read in the other four</td><td>confirmed, no reload</td></tr>
+  <tr><td>Every navigation view rendered, every farmer screen walked</td><td>78 views, 11 screens, 0 empty</td></tr>
+  <tr><td>JavaScript errors, broken links, malformed values</td><td>none</td></tr>
+</table>
+
+<div class="note warn"><b>One deliberate difference between the builds</b>
+The Ops console carries internal input-margin data — target and achieved margin per crop, the margin
+bridge, and the P&amp;L — that the farmer, buyer and Landbank builds do not. That omission is
+intentional and should stay: the shared state schema is identical, so sync is unaffected, but Kita's
+input economics do not belong in a surface a buyer or the bank can open.</div>
+
+<div class="note bad"><b>What is still not true</b>
+There are no signed buyer offtake agreements. Every buyer, volume and price in these applications is
+illustrative. The per-crop matching fee schedule is a recommendation and no buyer has agreed to any
+rate in it. The tripartite structure names Kita as a service party, and whether the buyer's payment
+undertaking is enforceable by Landbank — who is not a party to it — has not been confirmed by counsel.
+Nothing here should be presented as evidence of contracted demand.</div>
+
+<div class="foot">
+  Superseded builds, working demos and the earlier Company X generation remain in the parent folder and
+  are unchanged. The change record is in <code>BUYER_SYSTEM_PATCH_NOTES.md</code>; the patch sources and
+  the audit scripts are in <code>_buyer_system_patches/</code>.
+</div>
+
+</div>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Availability self-check.
+
+   Under file:// both fetch() and XMLHttpRequest are blocked, so the check
+   uses <link rel="preload">: the browser fetches the file into cache without
+   executing or parsing it, and fires load when it is there and error when it
+   is not. Loading it as a <script> would work too, but it would log a parse
+   error for every file found, because these are HTML documents. This is what
+   turns a dead browser tab into an explanation.
+--------------------------------------------------------------------------- */
+(function(){
+ var cards=[].slice.call(document.querySelectorAll('a.app'));
+ var alertBox=document.getElementById('alert'),
+     alertT=document.getElementById('alertT'),
+     alertB=document.getElementById('alertB'),
+     status=document.getElementById('status'),
+     openAll=document.getElementById('openAll'),
+     recheck=document.getElementById('recheck');
+
+ function probe(file){
+  return new Promise(function(res){
+   var l=document.createElement('link'), settled=false;
+   var done=function(ok){ if(settled)return; settled=true;
+                          if(l.parentNode)l.parentNode.removeChild(l); res(ok); };
+   l.rel='preload'; l.as='fetch'; l.href=file;
+   l.onload =function(){done(true);};
+   l.onerror=function(){done(false);};
+   document.head.appendChild(l);
+   setTimeout(function(){done(false);},6000);
+  });
+ }
+
+ function paint(results){
+  var missing=[];
+  results.forEach(function(r,i){
+   var card=cards[i], pill=card.querySelector('.st');
+   if(r){ pill.className='st ok'; pill.textContent='ready'; card.classList.remove('gone'); }
+   else { pill.className='st no'; pill.textContent='not in this folder';
+          card.classList.add('gone'); missing.push(card.dataset.f); }
+  });
+  var n=results.filter(Boolean).length;
+  status.textContent=n+' of '+cards.length+' applications found beside this page';
+  openAll.disabled=(n===0);
+  openAll.style.opacity=n?1:.45;
+
+  if(!missing.length){ alertBox.className='note bad'; return; }
+
+  alertBox.className='note bad on';
+  if(missing.length===cards.length){
+   alertT.textContent='None of the applications are beside this page';
+   alertB.innerHTML='This copy of the launcher is on its own — most likely it was downloaded by '+
+    'itself, or it is being shown in a preview pane that cannot reach other files. The links below '+
+    'will fail with <code>ERR_FILE_NOT_FOUND</code> until all six files sit in one folder.'+
+    '<ol><li>Open <code>Company X / Vera / _GO_LIVE</code> on the Desktop and launch '+
+    '<code>GO_LIVE.html</code> from there — that folder already has all six files.</li>'+
+    '<li>Or unzip <code>Kita_GO_LIVE.zip</code> anywhere and open the <code>GO_LIVE.html</code> '+
+    'inside it.</li></ol>'+
+    'Each application also works on its own — you can open any of the five directly. They only need '+
+    'to be in the same folder for this launcher, and in the same browser for the shared state.';
+  } else {
+   alertT.textContent='Some applications are missing from this folder';
+   alertB.innerHTML='Not found beside this page: <code>'+missing.join('</code>, <code>')+
+    '</code>. Copy them in from <code>Company X / Vera / _GO_LIVE</code>, or open the launcher from '+
+    'that folder instead.';
+  }
+ }
+
+ function run(){
+  status.textContent='checking…';
+  cards.forEach(function(c){ var p=c.querySelector('.st'); p.className='st'; p.textContent='checking…'; });
+  Promise.all(cards.map(function(c){return probe(c.dataset.f);})).then(paint);
+ }
+
+ /* clicking a card we know is missing should explain, not open a dead tab */
+ cards.forEach(function(c){
+  c.addEventListener('click',function(ev){
+   if(c.classList.contains('gone')){
+    ev.preventDefault();
+    alertBox.scrollIntoView({behavior:'smooth',block:'center'});
+   }
+  });
+ });
+
+ openAll.addEventListener('click',function(){
+  cards.filter(function(c){return !c.classList.contains('gone');})
+       .forEach(function(c,i){ setTimeout(function(){ window.open(c.dataset.f,'_blank'); }, i*350); });
+ });
+ recheck.addEventListener('click',run);
+
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+ else run();
+})();
+</script>
+</body>
+</html>
